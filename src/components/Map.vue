@@ -1,9 +1,11 @@
 <template>
   <div class="row">
       <vue-slider ref="slider"
-                  @callback="updateSlider"
                   v-bind="slider_data"
-                  v-model="slider_data.value"></vue-slider>
+                  v-model="slider_data.value"
+                  @callback="updateSlider"
+                  @drag-start="dragStart"
+                  @drag-end="dragEnd"></vue-slider>
 
     <div class="col-sm-12 col-lg-12 ">
       <button  @click="animateGraph()" type="button" class="btn btn-secondary" id="start">Start</button>
@@ -77,6 +79,7 @@
 
       animateGraph() {
         let current_index = this.getIndex('slider');
+        console.log(current_index)
         this.animated = true;
 
         let timing = d3.interval((elapsed) => {
@@ -118,6 +121,14 @@
       getIndex (name) {
         let slider = this.$refs[name];
         return slider.getIndex();
+      },
+
+      dragStart() {
+        this.stopAnimation();
+      },
+
+      dragEnd (){
+        this.animateGraph();
       },
 
       mapScale(data) {
