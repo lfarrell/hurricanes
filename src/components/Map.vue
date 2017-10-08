@@ -14,17 +14,20 @@
       <button  @click="fasterAnimation()" type="button" class="btn btn-secondary" id="faster">+</button>
       <button  @click="slowerAnimation()" type="button" class="btn btn-secondary" id="slower">-</button>
      </div>
-    <svg id="map" :width="width" height="800px">
-      <g>
-        <template v-for="(d, index) in filtered_hurricanes">
-          <circle :id="d.name + index"
-                  :cx="projection([+d.lng, +d.lat])[0]"
-                  :cy="projection([+d.lng, +d.lat])[1]"
-                  fill="red"
-                  :r="scale(+d.wind)"></circle>
-        </template>
-      </g>
-    </svg>
+    <div id="base" class="col-sm-12 col-lg-12 ">
+      <svg id="map" :width="width" height="800px">
+        <g>
+          <rect height="800" :width="width"></rect>
+          <template v-for="(d, index) in filtered_hurricanes">
+            <circle :id="d.name + index"
+                    :cx="projection([+d.lng, +d.lat])[0]"
+                    :cy="projection([+d.lng, +d.lat])[1]"
+                    fill="red"
+                    :r="scale(+d.wind)"></circle>
+          </template>
+        </g>
+      </svg>
+    </div>
   </div>
 </template>
 
@@ -39,6 +42,7 @@
     data() {
       return {
         width: window.innerWidth,
+        base_height: window.innerHeight,
         height: 800,
         hurricanes: [],
         filtered_hurricanes: [],
@@ -127,22 +131,22 @@
         this.stopAnimation();
       },
 
-      dragEnd (){
+      dragEnd () {
         this.animateGraph();
       },
 
       mapScale(data) {
         return d3.scaleSqrt()
           .domain(d3.extent(data, (d) => { return d.wind; }))
-          .range([2, 13]);
+          .range([1, 10]);
       },
 
       filteredData(test_value) {
         let parse_date = d3.timeParse('%Y-%m-%d %H:%M:%S');
         let date_to_milli = parse_date(test_value).getTime();
-        let four_hours = 60 * 60 * 168 * 1000;
+        let one_week = 60 * 60 * 168 * 1000;
         return this.hurricanes.filter(function(d) {
-          return d.full_date <= date_to_milli && d.full_date >= (date_to_milli - four_hours);
+          return d.full_date <= date_to_milli && d.full_date >= (date_to_milli - one_week);
         });
       },
 

@@ -6,3 +6,9 @@ body {
   stroke-opacity: .2;
   background-color: black;
 }
+
+rect {
+  fill: none;
+  stroke: none;
+  pointer-events: all;
+}
