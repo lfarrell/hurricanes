@@ -8,7 +8,7 @@
                   @drag-end="dragEnd"></vue-slider>
 
     <div class="col-sm-12 col-lg-12 ">
-      <button  @click="animateGraph()" type="button" class="btn btn-secondary" id="start">Start</button>
+      <button  @click="animateGraph()" type="button" class="btn" id="start">Start<icon name="play"></icon></button>
       <button  @click="stopAnimation()" type="button" class="btn btn-secondary" id="stop">Stop</button>
       <button  @click="stopAnimation()" type="button" class="btn btn-secondary" id="pause">Pause</button>
       <button  @click="fasterAnimation()" type="button" class="btn btn-secondary" id="faster">+</button>
@@ -27,6 +27,7 @@
           </template>
         </g>
       </svg>
+
     </div>
   </div>
 </template>
@@ -34,7 +35,10 @@
 <script>
   import * as d3 from 'd3';
   import * as _ from 'lodash';
+  import * as d3_proj from 'd3-geo-projection';
   import vueSlider from 'vue-slider-component';
+  import Icon from 'vue-awesome/components/Icon'
+  import 'vue-awesome/icons/play';
 
   export default {
     name: 'Map',
@@ -73,7 +77,8 @@
     },
 
     components: {
-      vueSlider
+      vueSlider,
+      Icon
     },
 
     methods: {
@@ -83,7 +88,6 @@
 
       animateGraph() {
         let current_index = this.getIndex('slider');
-        console.log(current_index)
         this.animated = true;
 
         let timing = d3.interval((elapsed) => {
@@ -150,6 +154,18 @@
         });
       },
 
+      formatValues(data) {
+        const ktToMph =1.1152;
+        const ktToKm = 1.85;
+
+        data.forEach((d) => {
+          d.mph = d.wind * ktToMph;
+          d.km = d.wind * ktToKm;
+        });
+
+        return data;
+      },
+
       draw() {
         let vm = this;
         let svg = d3.select('#map g');
@@ -163,7 +179,7 @@
               d.full_date = parse_date(d.time).getTime();
             });
             vm.map = map;
-            vm.hurricanes = data;
+            vm.hurricanes = vm.formatValues(data);
 
             let test_value = data[0].time;
             vm.flitered_hurricanes = vm.filteredData(test_value);
