@@ -1,24 +1,11 @@
 <template>
   <div class="row">
-      <vue-slider ref="slider"
-                  v-bind="slider_data"
-                  v-model="slider_data.value"
-                  @callback="updateSlider"
-                  @drag-start="dragStart"
-                  @drag-end="dragEnd"></vue-slider>
-
-    <div class="col-sm-12 col-lg-12 ">
-      <button  @click="animateGraph()" type="button" class="btn" id="start">Start<icon name="play"></icon></button>
-      <button  @click="stopAnimation()" type="button" class="btn btn-secondary" id="stop">Stop</button>
-      <button  @click="stopAnimation()" type="button" class="btn btn-secondary" id="pause">Pause</button>
-      <button  @click="fasterAnimation()" type="button" class="btn btn-secondary" id="faster">+</button>
-      <button  @click="slowerAnimation()" type="button" class="btn btn-secondary" id="slower">-</button>
-     </div>
-    <div id="base" class="col-sm-12 col-lg-12 ">
+    <timer></timer>
+    <div id="base" class="col-sm-12 col-lg-12">
       <svg id="map" :width="width" height="800px">
         <g>
           <rect height="800" :width="width"></rect>
-          <template v-for="(d, index) in filtered_hurricanes">
+          <template v-for="(d, index) in selectedHurricanes">
             <circle :id="d.name + index"
                     :cx="projection([+d.lng, +d.lat])[0]"
                     :cy="projection([+d.lng, +d.lat])[1]"
@@ -33,12 +20,10 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
   import * as d3 from 'd3';
   import * as _ from 'lodash';
-  import * as d3_proj from 'd3-geo-projection';
-  import vueSlider from 'vue-slider-component';
-  import Icon from 'vue-awesome/components/Icon'
-  import 'vue-awesome/icons/play';
+  import Timer from './Timer';
 
   export default {
     name: 'Map',
@@ -48,97 +33,23 @@
         width: window.innerWidth,
         base_height: window.innerHeight,
         height: 800,
-        hurricanes: [],
-        filtered_hurricanes: [],
         map: {},
         scale: {},
-        projection: {},
-        slider_values_length: 0,
-        current_slider_index: 0,
-        animated: false,
-        animating: {},
-        animationInterval: 100,
-        slider_data: {
-          value: '2015-11-18 18:00:00',
-          width: '80%',
-          speed: .5,
-          formatter: function(value) {
-            let formatting = d3.timeFormat('%b %d %I:%M %p, %Y');
-            let create_date = d3.timeParse("%Y-%m-%d %H:%M:%S");
-            return formatting(create_date(value));
-          },
-          style: {
-            marginLeft: '10%',
-            marginBottom: '1%'
-          },
-          data: []
-        }
+        projection: {}
       }
     },
 
     components: {
-      vueSlider,
-      Icon
+      Timer
+    },
+
+    computed: {
+      selectedHurricanes() {
+        return this.$store.getters.getSelectedHurricanes;
+      }
     },
 
     methods: {
-      updateSlider(val) {
-        this.filtered_hurricanes = this.filteredData(val);
-      },
-
-      animateGraph() {
-        let current_index = this.getIndex('slider');
-        this.animated = true;
-
-        let timing = d3.interval((elapsed) => {
-          if(this.current_slider_index > this.slider_values_length) {
-            timing.stop();
-          }
-          this.current_slider_index = current_index += 1;
-          this.setIndex('slider', this.current_slider_index);
-        }, this.animationInterval);
-
-        this.animating = timing;
-      },
-
-      stopAnimation() {
-        if(this.animated) {
-          this.animating.stop();
-        }
-      },
-
-      fasterAnimation() {
-        let interval = this.animationInterval;
-        let speed = this.slider_data.speed;
-        this.animationInterval = (interval <= 100) ? interval -= 25 :interval;
-        this.slider_data.speed = (speed <= .9) ? speed += .2 : speed;
-      },
-
-      slowerAnimation() {
-        let interval = this.animationInterval;
-        let speed = this.slider_data.speed;
-        this.animationInterval = (interval > 50) ? interval += 25 : interval;
-        this.slider_data.speed = (speed > .5) ? speed -= .2 : speed;
-      },
-
-      setIndex (name, num) {
-        let slider = this.$refs[name];
-        slider.setIndex(num)
-      },
-
-      getIndex (name) {
-        let slider = this.$refs[name];
-        return slider.getIndex();
-      },
-
-      dragStart() {
-        this.stopAnimation();
-      },
-
-      dragEnd () {
-        this.animateGraph();
-      },
-
       mapScale(data) {
         return d3.scaleSqrt()
           .domain(d3.extent(data, (d) => { return d.wind; }))
@@ -149,7 +60,8 @@
         let parse_date = d3.timeParse('%Y-%m-%d %H:%M:%S');
         let date_to_milli = parse_date(test_value).getTime();
         let one_week = 60 * 60 * 168 * 1000;
-        return this.hurricanes.filter(function(d) {
+
+        return this.$store.getters.getHurricanes.filter(function(d) {
           return d.full_date <= date_to_milli && d.full_date >= (date_to_milli - one_week);
         });
       },
@@ -166,7 +78,12 @@
         return data;
       },
 
+      selectedDates: function() {
+        return _.map(_.uniq(this.$store.getters.getHurricanes, 'time'), 'time');
+      },
+
       draw() {
+        const parse_date = d3.timeParse('%Y-%m-%d %H:%M:%S');
         let vm = this;
         let svg = d3.select('#map g');
 
@@ -174,19 +91,18 @@
           .defer(d3.json, 'static/data/map.geojson')
           .defer(d3.csv, 'static/data/2016.csv')
           .await(function(error, map, data) {
-            let parse_date = d3.timeParse('%Y-%m-%d %H:%M:%S');
+            vm.map = map;
+
             data.forEach((d) => {
               d.full_date = parse_date(d.time).getTime();
             });
-            vm.map = map;
-            vm.hurricanes = vm.formatValues(data);
+
+            vm.$store.dispatch('setHurricanes', vm.formatValues(data));
+            vm.$store.dispatch('setAllDates', vm.selectedDates());
 
             let test_value = data[0].time;
-            vm.flitered_hurricanes = vm.filteredData(test_value);
+            vm.$store.dispatch('setSelectedHurricanes', vm.filteredData(test_value));
 
-            let slider_values = _.map(_.uniq(data, 'time'), 'time');
-            vm.slider_data.data = slider_values;
-            vm.slider_values_length = slider_values.length;
             vm.scale = vm.mapScale(data);
 
             let scale = 1,
