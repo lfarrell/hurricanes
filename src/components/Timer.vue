@@ -28,7 +28,7 @@
 
     data() {
       return {
-        slider_values_length: this.allSize,
+        slider_values_length: 0,
         current_slider_index: 0,
         animated: false,
         animating: {},
@@ -46,24 +46,25 @@
             marginLeft: '10%',
             marginBottom: '1%'
           },
-          data: this.allDates
+          data: []
         }
+      }
+    },
+
+    props: {
+      dateValues: Array
+    },
+
+    watch: {
+      dateValues: function(val) {
+        this.dateValues = val;
+        this.draw();
       }
     },
 
     components: {
       vueSlider,
       Icon
-    },
-
-    computed: {
-      allDates() {
-        return this.$store.getters.getAllDates;
-      },
-
-      allSize() {
-        return this.$store.getters.getAllDates.length;
-      }
     },
 
     methods: {
@@ -132,6 +133,11 @@
 
       dragEnd () {
         this.animateGraph();
+      },
+
+      draw() {
+        this.slider_data.data = this.dateValues;
+        this.slider_values_length = this.slider_data.data.length;
       }
     }
   }

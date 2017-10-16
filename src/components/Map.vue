@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <timer></timer>
+    <timer :dateValues="dates"></timer>
     <div id="base" class="col-sm-12 col-lg-12">
       <svg id="map" :width="width" height="800px">
         <g>
@@ -20,7 +20,6 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
   import * as d3 from 'd3';
   import * as _ from 'lodash';
   import Timer from './Timer';
@@ -35,7 +34,8 @@
         height: 800,
         map: {},
         scale: {},
-        projection: {}
+        projection: {},
+        dates: []
       }
     },
 
@@ -78,10 +78,6 @@
         return data;
       },
 
-      selectedDates: function() {
-        return _.map(_.uniq(this.$store.getters.getHurricanes, 'time'), 'time');
-      },
-
       draw() {
         const parse_date = d3.timeParse('%Y-%m-%d %H:%M:%S');
         let vm = this;
@@ -98,7 +94,7 @@
             });
 
             vm.$store.dispatch('setHurricanes', vm.formatValues(data));
-            vm.$store.dispatch('setAllDates', vm.selectedDates());
+            vm.dates = _.map(_.uniq(data, 'time'), 'time');
 
             let test_value = data[0].time;
             vm.$store.dispatch('setSelectedHurricanes', vm.filteredData(test_value));

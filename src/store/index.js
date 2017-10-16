@@ -4,17 +4,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    allDates: [],
     currentDate: '',
     hurricanes: [],
     selectedHurricanes: []
   },
 
   getters: {
-    getAllDates(state) {
-      return state.allDates;
-    },
-
     getCurrentDate(state) {
       return state.currentDate;
     },
@@ -29,10 +24,6 @@ export default new Vuex.Store({
   },
 
   mutations: {
-    setAllDates(state, dates){
-      state.allDates = dates;
-    },
-
     setCurrentDate(state, currentDate) {
       state.currentDate = currentDate;
     },
@@ -47,10 +38,6 @@ export default new Vuex.Store({
   },
 
   actions: {
-    setAllDates({commit}, dates){
-      commit('setAllDates', dates);
-    },
-
     setCurrentDate({commit}, currentDate) {
       commit('setCurrentDate', currentDate);
     },
