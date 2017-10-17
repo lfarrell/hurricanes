@@ -9,7 +9,6 @@
             <circle :id="d.name + index"
                     :cx="projection([+d.lng, +d.lat])[0]"
                     :cy="projection([+d.lng, +d.lat])[1]"
-                    fill="red"
                     :r="scale(+d.wind)"></circle>
           </template>
         </g>
@@ -35,7 +34,9 @@
         map: {},
         scale: {},
         projection: {},
-        dates: []
+        dates: [],
+        hurricaneColors: [],
+        colors: ['#d73027','#fc8d59','#fee090','#ffffbf','#e0f3f8','#91bfdb','#4575b4']
       }
     },
 
@@ -50,6 +51,10 @@
     },
 
     methods: {
+      uniqHurricanes(data) {
+        return _.map(_.uniq(data, 'name'), 'name');
+      },
+
       mapScale(data) {
         return d3.scaleSqrt()
           .domain(d3.extent(data, (d) => { return d.wind; }))
@@ -73,6 +78,7 @@
         data.forEach((d) => {
           d.mph = d.wind * ktToMph;
           d.km = d.wind * ktToKm;
+          d.color = this.colors[1];
         });
 
         return data;
@@ -88,6 +94,9 @@
           .defer(d3.csv, 'static/data/2016.csv')
           .await(function(error, map, data) {
             vm.map = map;
+
+            vm.hurricaneColors = vm.uniqHurricanes(data);
+            console.log(vm.hurricaneColors.length)
 
             data.forEach((d) => {
               d.full_date = parse_date(d.time).getTime();

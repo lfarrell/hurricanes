@@ -8,10 +8,10 @@
                 @drag-end="dragEnd"></vue-slider>
      <div class="col-sm-12 col-lg-12 ">
       <button  @click="animateGraph()" type="button" class="btn" id="start">Start<icon name="play"></icon></button>
-      <button  @click="stopAnimation()" type="button" class="btn btn-secondary" id="stop">Stop</button>
-      <button  @click="stopAnimation()" type="button" class="btn btn-secondary" id="pause">Pause</button>
-      <button  @click="fasterAnimation()" type="button" class="btn btn-secondary" id="faster">+</button>
-      <button  @click="slowerAnimation()" type="button" class="btn btn-secondary" id="slower">-</button>
+      <button  @click="stopAnimation()" type="button" class="btn" id="stop">Stop<icon name="stop"></icon></button>
+      <button  @click="pauseAnimation()" type="button" class="btn" id="pause">Pause<icon name="pause"></icon></button>
+      <button  @click="fasterAnimation()" type="button" class="btn" id="faster">Faster<icon name="step-forward"></icon></button>
+      <button  @click="slowerAnimation()" type="button" class="btn" id="slower">Slower<icon name="step-backward"></icon></button>
     </div>
   </div>
 </template>
@@ -22,6 +22,10 @@
   import vueSlider from 'vue-slider-component';
   import Icon from 'vue-awesome/components/Icon'
   import 'vue-awesome/icons/play';
+  import 'vue-awesome/icons/stop';
+  import 'vue-awesome/icons/pause';
+  import 'vue-awesome/icons/step-forward';
+  import 'vue-awesome/icons/step-backward';
 
   export default {
     name: 'Timer',
@@ -98,6 +102,13 @@
       },
 
       stopAnimation() {
+        if(this.animated) {
+          this.animating.stop();
+          this.setIndex('slider', 0);
+        }
+      },
+
+      pauseAnimation() {
         if(this.animated) {
           this.animating.stop();
         }
