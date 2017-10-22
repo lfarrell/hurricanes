@@ -32,7 +32,7 @@
 
     data() {
       return {
-        width: Math.round(window.innerWidth * .7),
+        width: Math.round(window.innerWidth * .8),
         base_height: window.innerHeight,
         height: 700,
         map: {},
@@ -87,7 +87,9 @@
           d.mph = windFormat(d.wind * ktToMph);
           d.km = windFormat(d.wind * ktToKm);
           d.date = dateFormat(dateParse(d.time));
-          d.name = _.capitalize(d.name.toLowerCase());
+          d.name = (d.name === 'NONAME') ? 'No Name' : _.capitalize(d.name.toLowerCase());
+          d.display_lat = _.round(d.lat, 3);
+          d.display_lng = _.round(d.lng, 3);
         });
 
         return data;
@@ -111,7 +113,7 @@
             });
 
             vm.$store.dispatch('setHurricanes', vm.formatValues(data));
-            vm.dates = _.map(_.uniq(data, 'time'), 'time');
+            vm.dates = _.map(_.uniqBy(data, 'time'), 'time');
 
             let test_value = data[0].time;
             vm.$store.dispatch('setSelectedHurricanes', vm.filteredData(test_value));
@@ -128,7 +130,7 @@
             let bounds = path.bounds(map);
             scale = .98 / Math.max((bounds[1][0] - bounds[0][0]) / vm.width, (bounds[1][1] - bounds[0][1]) / vm.height);
             let translation = [(vm.width - scale * (bounds[1][0] + bounds[0][0])) / 2,
-              (vm.height - scale * (bounds[1][1] + bounds[0][1])) / 2.8];
+              (vm.height - scale * (bounds[1][1] + bounds[0][1])) / 2.5];
 
             // update projection
             projection = mapType
