@@ -41,7 +41,7 @@
   }
 
   #scroller-list {
-    margin: 15px 0 0 0;
+    margin: 0;
     padding-left: 5px;
   }
 
