@@ -37,10 +37,9 @@
       selectedData: Array,
     },
 
-    watch: {
-      selectedData: function(val) {
-        this.selectedData = val;
-        this.draw();
+    computed: {
+      getHurricanes() {
+        return this.$store.getters.getHurricanes;
       }
     },
 
@@ -62,7 +61,7 @@
           margin = this.margins(),
           num_format = d3.format(',');
 
-        let tip_div = tip.tipDiv();
+    //    let tip_div = tip.tipDiv();
         let xScale = d3.scaleTime().domain(d3.extent(data, function(d) { return format(d.time); }));
 
         xScale.range([0, this.graph_width]);
@@ -74,7 +73,7 @@
 
         let scales = {xScale: xScale, yScale: yScale};
 
-        let bisectDate = d3.bisector(function(d) { return format(d.time); }).right;
+      //  let bisectDate = d3.bisector(function(d) { return format(d.time); }).right;
 
         // Create Axis
         let xAxis = d3.axisBottom()
@@ -104,7 +103,7 @@
           .ease(d3.easeSinInOut)
           .attr('d', timing(data));
 
-        let focus = d3.select('.focus');
+   /*     let focus = d3.select('.focus');
         d3.select('rect.overlay').on('mouseover touchstart', function () {
           focus.style('display', null);
         }).on('mouseout touchend', function () {
@@ -134,7 +133,7 @@
           </ul>`;
 
          // tip.tipShow(tip_div, message);
-        }
+        }*/
       }
     }
   }

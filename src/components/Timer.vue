@@ -18,7 +18,6 @@
 
 <script>
   import * as d3 from 'd3';
-  import * as _ from 'lodash';
   import vueSlider from 'vue-slider-component';
   import Icon from 'vue-awesome/components/Icon'
   import 'vue-awesome/icons/play';
@@ -153,3 +152,21 @@
     }
   }
 </script>
+
+<style scoped>
+  #faster {
+    margin-left: 25px;
+  }
+
+  .btn .fa-icon {
+    vertical-align: middle;
+    margin-left: 0.5rem;
+  }
+  .btn .fa-icon:last-child {
+    margin-right: 0;
+  }
+
+  .btn:hover {
+    cursor: pointer;
+  }
+</style>

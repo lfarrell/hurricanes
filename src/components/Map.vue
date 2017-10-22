@@ -1,10 +1,13 @@
 <template>
   <div class="row">
     <timer :dateValues="dates"></timer>
-    <div id="base" class="col-sm-12 col-lg-12">
+    <div class="col-sm-3 col-lg-2">
+      <scroller></scroller>
+    </div>
+    <div id="base" class="col-sm-9 col-lg-10">
       <svg id="map" :width="width" height="800px">
         <g>
-          <rect height="800" :width="width"></rect>
+          <rect :height="height" :width="width"></rect>
           <template v-for="(d, index) in selectedHurricanes">
             <circle :id="d.name + index"
                     :cx="projection([+d.lng, +d.lat])[0]"
@@ -22,15 +25,16 @@
   import * as d3 from 'd3';
   import * as _ from 'lodash';
   import Timer from './Timer';
+  import Scroller from './Scroller';
 
   export default {
     name: 'Map',
 
     data() {
       return {
-        width: window.innerWidth,
+        width: Math.round(window.innerWidth * .7),
         base_height: window.innerHeight,
-        height: 800,
+        height: 700,
         map: {},
         scale: {},
         projection: {},
@@ -41,7 +45,8 @@
     },
 
     components: {
-      Timer
+      Timer,
+      Scroller
     },
 
     computed: {
@@ -74,11 +79,15 @@
       formatValues(data) {
         const ktToMph =1.1152;
         const ktToKm = 1.85;
+        const windFormat = d3.format(".1f");
+        const dateParse = d3.timeParse("%Y-%m-%d %H:%M:%S");
+        const dateFormat = d3.timeFormat('%b %d %I:%M %p, %Y');
 
         data.forEach((d) => {
-          d.mph = d.wind * ktToMph;
-          d.km = d.wind * ktToKm;
-          d.color = this.colors[1];
+          d.mph = windFormat(d.wind * ktToMph);
+          d.km = windFormat(d.wind * ktToKm);
+          d.date = dateFormat(dateParse(d.time));
+          d.name = _.capitalize(d.name.toLowerCase());
         });
 
         return data;
@@ -96,7 +105,6 @@
             vm.map = map;
 
             vm.hurricaneColors = vm.uniqHurricanes(data);
-            console.log(vm.hurricaneColors.length)
 
             data.forEach((d) => {
               d.full_date = parse_date(d.time).getTime();
@@ -118,9 +126,9 @@
 
             let path = d3.geoPath().projection(projection);
             let bounds = path.bounds(map);
-            scale = .95 / Math.max((bounds[1][0] - bounds[0][0]) / vm.width, (bounds[1][1] - bounds[0][1]) / vm.height);
+            scale = .98 / Math.max((bounds[1][0] - bounds[0][0]) / vm.width, (bounds[1][1] - bounds[0][1]) / vm.height);
             let translation = [(vm.width - scale * (bounds[1][0] + bounds[0][0])) / 2,
-              (vm.height - scale * (bounds[1][1] + bounds[0][1])) / 2];
+              (vm.height - scale * (bounds[1][1] + bounds[0][1])) / 2.8];
 
             // update projection
             projection = mapType
@@ -158,7 +166,17 @@
 </script>
 
 <style scoped>
-  #pause {
-    margin-right: 25px;
+  #base {
+    margin: 0;
+  }
+  rect {
+    fill: none;
+    stroke: none;
+    pointer-events: all;
+  }
+
+  circle {
+    fill: orange;
+    fill-opacity: .5;
   }
 </style>
