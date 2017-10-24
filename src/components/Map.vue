@@ -12,7 +12,10 @@
             <circle :id="d.name + index"
                     :cx="projection([+d.lng, +d.lat])[0]"
                     :cy="projection([+d.lng, +d.lat])[1]"
-                    :r="scale(+d.wind)"></circle>
+                    :r="scale(+d.wind)"
+                    v-b-tooltip.html
+                    :title="hurricaneNote(d)"
+                    variant="outline-success"></circle>
           </template>
         </g>
       </svg>
@@ -58,6 +61,16 @@
     methods: {
       uniqHurricanes(data) {
         return _.map(_.uniq(data, 'name'), 'name');
+      },
+
+      hurricaneNote(d) {
+        return `<h5 class="text-center">${d.name}</h5>
+        <p>
+        ${d.date}
+        Wind: ${d.mph} mph<br/>
+        Latitude: ${d.display_lat}<br/>
+        Longitude: ${d.display_lng}
+        </p>`;
       },
 
       mapScale(data) {

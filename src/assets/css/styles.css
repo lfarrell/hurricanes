@@ -6,3 +6,9 @@ body {
   stroke-opacity: .2;
   background-color: black;
 }
+
+.tooltip-inner {
+  background-color: white;
+  color: #333;
+  border: 1px solid lightslategray;
+}
