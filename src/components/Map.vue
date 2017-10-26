@@ -19,7 +19,9 @@
           </template>
         </g>
       </svg>
-
+    </div>
+    <div class="col-sm-12 col-lg-12">
+      <canvas-map></canvas-map>
     </div>
   </div>
 </template>
@@ -29,6 +31,7 @@
   import * as _ from 'lodash';
   import Timer from './Timer';
   import Scroller from './Scroller';
+  import CanvasMap from './CanvasMap';
 
   export default {
     name: 'Map',
@@ -49,7 +52,8 @@
 
     components: {
       Timer,
-      Scroller
+      Scroller,
+      CanvasMap
     },
 
     computed: {
