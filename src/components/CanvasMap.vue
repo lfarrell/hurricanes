@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <template v-for="name in names">
-      <div class="col-sm-4 col-lg-3">
+      <div class="col-sm-4 col-lg-4">
         <h3 class="text-center">{{name}}</h3>
         <canvas :id="name" :height="height" :width="width"></canvas>
       </div>
@@ -25,6 +25,12 @@
     },
 
     methods: {
+      mapScale(data) {
+        return d3.scaleSqrt()
+          .domain(d3.extent(data, (d) => { return +d.wind; }))
+          .range([1, 5]);
+      },
+
       draw() {
         let vm = this;
 
@@ -33,6 +39,7 @@
           .defer(d3.csv, 'static/data/most_powerful.csv')
           .await(function(error, map, data) {
             let storms = _.groupBy(data, 'name');
+            let sizing = vm.mapScale(data);
 
             let scale = 1,
               mapType = d3.geoEquirectangular(),
@@ -42,14 +49,16 @@
 
             let path = d3.geoPath().projection(projection);
             let bounds = path.bounds(map);
-            scale = .98 / Math.max((bounds[1][0] - bounds[0][0]) / vm.width, (bounds[1][1] - bounds[0][1]) / vm.height);
+            scale = .98 / Math.max((bounds[1][0] - bounds[0][0]) / vm.width * .3, (bounds[1][1] - bounds[0][1]) / vm.height * .25);
             let translation = [(vm.width - scale * (bounds[1][0] + bounds[0][0])) / 2,
-              (vm.height - scale * (bounds[1][1] + bounds[0][1])) / 2.5];
+              (vm.height - scale * (bounds[1][1] + bounds[0][1])) / 2];
 
             // update projection
             projection = mapType
               .scale(scale)
               .translate(translation);
+
+            projection.center([-80,30]);
 
             for (let i = 0, n = vm.names.length; i < n; ++i) {
               let canvas = d3.select(`#${vm.names[i]}`);
@@ -70,13 +79,13 @@
 
               // Add hurricane path
               for (let t = 0, r = storms[vm.names[i]].length; t < r; ++t) {
-                storms[vm.names[i]][t].x = projection([storms[vm.names[i]][t].lng, storms[vm.names[i]][t].lat])[0];
-                storms[vm.names[i]][t].y = projection([storms[vm.names[i]][t].lng, storms[vm.names[i]][t].lat])[1];
-
                 let node = storms[vm.names[i]][t];
+                node.x = projection([node.lng, node.lat])[0];
+                node.y = projection([node.lng, node.lat])[1];
+
                 ctx.beginPath();
                 ctx.moveTo(node.x, node.y);
-                ctx.arc(node.x, node.y, 1.5, 0, 2 * Math.PI, false);
+                ctx.arc(node.x, node.y, sizing(node.wind), 0, 2 * Math.PI, false);
                 ctx.lineWidth = 8;
                 ctx.fillStyle = 'rgba(255,165,0, 0.5)';
                 ctx.fill();

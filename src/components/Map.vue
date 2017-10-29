@@ -22,8 +22,8 @@
           </g>
         </svg>
       </div>
+      <canvas-map></canvas-map>
     </div>
-    <canvas-map></canvas-map>
   </div>
 </template>
 
