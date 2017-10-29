@@ -27,19 +27,19 @@
 
     data() {
       return {
+        data: [],
         graph_height: 500 - this.margins().top -this. margins().bottom,
         graph_width: 650 - this.margins().left - this.margins().right,
         graph_translate: `translate(${this.margins().left},${this.margins().top})`
       }
     },
 
-    props: {
-      selectedData: Array,
-    },
-
     computed: {
       getHurricanes() {
-        return this.$store.getters.getHurricanes;
+        return d3.nest()
+          .key((d) => d.time)
+          .rollup((values) => _.countBy(values, 'time'))
+          .entries(this.$store.getters.getHurricanes);
       }
     },
 
@@ -56,18 +56,16 @@
       },
 
       draw() {
-        let data = this.histAvg(this.selectedData),
+        let data = this.getHurricanes(),
           format = d3.timeParse('%m/%Y'),
-          margin = this.margins(),
-          num_format = d3.format(',');
+          margin = this.margins();
 
-    //    let tip_div = tip.tipDiv();
         let xScale = d3.scaleTime().domain(d3.extent(data, function(d) { return format(d.time); }));
 
         xScale.range([0, this.graph_width]);
 
         let yScale = d3.scaleLinear()
-          .domain([d3.max(data, function(d) { return d.capacity; }) * 1.2, 0]);
+          .domain([d3.max(data, function(d) { return d.count; }) * 1.2, 0]);
 
         yScale.range([0, this.graph_height]);
 
@@ -82,7 +80,7 @@
         let yAxis = d3.axisLeft()
           .scale(yScale);
 
-        let timing = this.linePath('storage', format, scales);
+        let timing = this.linePath('count', format, scales);
 
         d3.select('#line-chart')
           .attr('width', this.graph_width + margin.left + margin.right)

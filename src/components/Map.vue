@@ -1,28 +1,29 @@
 <template>
-  <div class="row">
-    <timer :dateValues="dates"></timer>
-    <div class="col-sm-3 col-lg-2">
-      <scroller></scroller>
+  <div class="col-sm-12 col-lg-12">
+    <div v-if="loading" class="loader">Loading...</div>
+    <div class="row" v-show="done">
+      <timer :dateValues="dates"></timer>
+      <div class="col-sm-3 col-lg-2">
+        <scroller></scroller>
+      </div>
+      <div id="base" class="col-sm-9 col-lg-10">
+        <svg id="map" :width="width" height="800px">
+          <g>
+            <rect :height="height" :width="width"></rect>
+            <template v-for="(d, index) in selectedHurricanes">
+              <circle :id="d.name + index"
+                      :cx="projection([+d.lng, +d.lat])[0]"
+                      :cy="projection([+d.lng, +d.lat])[1]"
+                      :r="scale(+d.wind)"
+                      v-b-tooltip.html
+                      :title="hurricaneNote(d)"
+                      variant="outline-success"></circle>
+            </template>
+          </g>
+        </svg>
+      </div>
     </div>
-    <div id="base" class="col-sm-9 col-lg-10">
-      <svg id="map" :width="width" height="800px">
-        <g>
-          <rect :height="height" :width="width"></rect>
-          <template v-for="(d, index) in selectedHurricanes">
-            <circle :id="d.name + index"
-                    :cx="projection([+d.lng, +d.lat])[0]"
-                    :cy="projection([+d.lng, +d.lat])[1]"
-                    :r="scale(+d.wind)"
-                    v-b-tooltip.html
-                    :title="hurricaneNote(d)"
-                    variant="outline-success"></circle>
-          </template>
-        </g>
-      </svg>
-    </div>
-    <div class="col-sm-12 col-lg-12">
-      <canvas-map></canvas-map>
-    </div>
+    <canvas-map></canvas-map>
   </div>
 </template>
 
@@ -38,6 +39,8 @@
 
     data() {
       return {
+        loading: true,
+        done: false,
         width: Math.round(window.innerWidth * .8),
         base_height: window.innerHeight,
         height: 700,
@@ -84,7 +87,7 @@
       },
 
       filteredData(test_value) {
-        let parse_date = d3.timeParse('%Y-%m-%d %H:%M:%S');
+        let parse_date = this.dateFormat();
         let date_to_milli = parse_date(test_value).getTime();
         let one_week = 60 * 60 * 168 * 1000;
 
@@ -97,14 +100,14 @@
         const ktToMph =1.1152;
         const ktToKm = 1.85;
         const windFormat = d3.format(".1f");
-        const dateParse = d3.timeParse("%Y-%m-%d %H:%M:%S");
+        const dateParse = this.dateFormat();
         const dateFormat = d3.timeFormat('%b %d %I:%M %p, %Y');
 
         data.forEach((d) => {
           d.mph = windFormat(d.wind * ktToMph);
           d.km = windFormat(d.wind * ktToKm);
           d.date = dateFormat(dateParse(d.time));
-          d.name = (d.name === 'NONAME') ? 'No Name' : _.capitalize(d.name.toLowerCase());
+          d.name = _.capitalize(d.name.toLowerCase());
           d.display_lat = _.round(d.lat, 3);
           d.display_lng = _.round(d.lng, 3);
         });
@@ -112,14 +115,18 @@
         return data;
       },
 
+      dateFormat() {
+        return d3.timeParse('%Y-%m-%d %H:%M');
+      },
+
       draw() {
-        const parse_date = d3.timeParse('%Y-%m-%d %H:%M:%S');
+        const parse_date = this.dateFormat();
         let vm = this;
         let svg = d3.select('#map g');
 
         d3.queue()
           .defer(d3.json, 'static/data/map.geojson')
-          .defer(d3.csv, 'static/data/2016.csv')
+          .defer(d3.csv, 'static/data/all_storms_short.csv')
           .await(function(error, map, data) {
             vm.map = map;
 
@@ -174,6 +181,9 @@
             function zoomed() {
               svg.attr("transform", d3.event.transform);
             }
+
+            vm.loading = false;
+            vm.done = true;
           });
       }
     },
@@ -187,6 +197,12 @@
 <style scoped>
   #base {
     margin: 0;
+  }
+  .loader {
+    font-size: 3em;
+    margin-top:25px;
+    text-align: center;
+    color: white;
   }
   rect {
     fill: none;

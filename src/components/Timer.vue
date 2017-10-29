@@ -37,12 +37,12 @@
         animating: {},
         animationInterval: 100,
         slider_data: {
-          value: '2015-11-18 18:00:00',
+          value: '1965-06-04 00:00:00',
           width: '80%',
           speed: .5,
           formatter: function(value) {
             let formatting = d3.timeFormat('%b %d %I:%M %p, %Y');
-            let create_date = d3.timeParse("%Y-%m-%d %H:%M:%S");
+            let create_date = d3.timeParse("%Y-%m-%d %H:%M");
             return formatting(create_date(value));
           },
           style: {
@@ -72,7 +72,7 @@
 
     methods: {
       filteredData(test_value) {
-        let parse_date = d3.timeParse('%Y-%m-%d %H:%M:%S');
+        let parse_date = d3.timeParse('%Y-%m-%d %H:%M');
         let date_to_milli = parse_date(test_value).getTime();
         let one_week = 60 * 60 * 168 * 1000;
 

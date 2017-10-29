@@ -1,5 +1,12 @@
 <template>
-  <canvas id="bob" :height="height" :width="width"></canvas>
+  <div class="row">
+    <template v-for="name in names">
+      <div class="col-sm-4 col-lg-3">
+        <h3 class="text-center">{{name}}</h3>
+        <canvas :id="name" :height="height" :width="width"></canvas>
+      </div>
+    </template>
+  </div>
 </template>
 
 <script>
@@ -13,6 +20,7 @@
       return {
         width: 300,
         height: 300,
+        names: ["ALLEN", "ANDREW", "GILBERT", "LINDA", "PATRICIA", "WILMA", "SANDY"]
       }
     },
 
@@ -22,8 +30,10 @@
 
         d3.queue()
           .defer(d3.json, 'static/data/map.geojson')
-          .defer(d3.csv, 'static/data/2016.csv')
+          .defer(d3.csv, 'static/data/most_powerful.csv')
           .await(function(error, map, data) {
+            let storms = _.groupBy(data, 'name');
+
             let scale = 1,
               mapType = d3.geoEquirectangular(),
               projection = mapType
@@ -41,22 +51,37 @@
               .scale(scale)
               .translate(translation);
 
-           // let canvas = d3.select(`#${this.id_value}`);
-            let canvas = d3.select('#bob');
-            let ctx = canvas.node().getContext('2d');
+            for (let i = 0, n = vm.names.length; i < n; ++i) {
+              let canvas = d3.select(`#${vm.names[i]}`);
+              let ctx = canvas.node().getContext('2d');
 
-            path = d3.geoPath()
-              .projection(projection)
-              .context(ctx);
+              path = d3.geoPath()
+                .projection(projection)
+                .context(ctx);
 
-            ctx.beginPath();
-            path({type: 'FeatureCollection', features: map.features});
+              ctx.beginPath();
+              path({type: 'FeatureCollection', features: map.features});
 
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
-            ctx.fill();
-            ctx.lineWidth = '1';
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-            ctx.stroke();
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+              ctx.fill();
+              ctx.lineWidth = 1;
+              ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+              ctx.stroke();
+
+              // Add hurricane path
+              for (let t = 0, r = storms[vm.names[i]].length; t < r; ++t) {
+                storms[vm.names[i]][t].x = projection([storms[vm.names[i]][t].lng, storms[vm.names[i]][t].lat])[0];
+                storms[vm.names[i]][t].y = projection([storms[vm.names[i]][t].lng, storms[vm.names[i]][t].lat])[1];
+
+                let node = storms[vm.names[i]][t];
+                ctx.beginPath();
+                ctx.moveTo(node.x, node.y);
+                ctx.arc(node.x, node.y, 1.5, 0, 2 * Math.PI, false);
+                ctx.lineWidth = 8;
+                ctx.fillStyle = 'rgba(255,165,0, 0.5)';
+                ctx.fill();
+              }
+            }
           });
       }
     },
@@ -66,3 +91,9 @@
     }
   }
 </script>
+
+<style scoped>
+  h3 {
+    color: white;
+  }
+</style>
