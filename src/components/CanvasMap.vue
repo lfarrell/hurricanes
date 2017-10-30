@@ -1,8 +1,9 @@
 <template>
-  <div class="row">
+  <div id="storms" class="row">
+    <h2 class="text-center">Notable Storms</h2>
     <template v-for="name in names">
       <div class="col-sm-4 col-lg-4">
-        <h3 class="text-center">{{name}}</h3>
+        <h4 class="text-center">{{name}}</h4>
         <canvas :id="name" :height="height" :width="width"></canvas>
       </div>
     </template>
@@ -28,7 +29,7 @@
       mapScale(data) {
         return d3.scaleSqrt()
           .domain(d3.extent(data, (d) => { return +d.wind; }))
-          .range([1, 5]);
+          .range([.5, 6]);
       },
 
       draw() {
@@ -86,7 +87,7 @@
                 ctx.beginPath();
                 ctx.moveTo(node.x, node.y);
                 ctx.arc(node.x, node.y, sizing(node.wind), 0, 2 * Math.PI, false);
-                ctx.lineWidth = 8;
+                ctx.lineWidth = 4;
                 ctx.fillStyle = 'rgba(255,165,0, 0.5)';
                 ctx.fill();
               }
@@ -102,7 +103,15 @@
 </script>
 
 <style scoped>
-  h3 {
+  #storms {
     color: white;
+  }
+
+  h2 {
+    width: 100%;
+  }
+
+  h4 {
+    margin-top: 25px;
   }
 </style>

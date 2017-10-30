@@ -48,6 +48,7 @@
   #scroller-list li {
     list-style-type: none;
     color: white;
+    font-weight: 500;
     text-align: center;
     padding-top: 10px;
   }

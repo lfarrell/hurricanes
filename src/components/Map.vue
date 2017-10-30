@@ -2,6 +2,7 @@
   <div class="col-sm-12 col-lg-12">
     <div v-if="loading" class="loader">Loading...</div>
     <div class="row" v-show="done">
+      <h1 class="text-center">Storms of the World - Cyclones, Typhoons and Hurricanes</h1>
       <timer :dateValues="dates"></timer>
       <div class="col-sm-3 col-lg-2">
         <scroller></scroller>
@@ -126,10 +127,9 @@
 
         d3.queue()
           .defer(d3.json, 'static/data/map.geojson')
-          .defer(d3.csv, 'static/data/all_storms_short.csv')
+          .defer(d3.csv, 'static/data/all_storms_short_1980.csv')
           .await(function(error, map, data) {
             vm.map = map;
-
             vm.hurricaneColors = vm.uniqHurricanes(data);
 
             data.forEach((d) => {
@@ -197,6 +197,11 @@
 <style scoped>
   #base {
     margin: 0;
+  }
+  h1 {
+    color: white;
+    margin-bottom: 75px;
+    width: 100%;
   }
   .loader {
     font-size: 3em;

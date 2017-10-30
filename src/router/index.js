@@ -5,6 +5,8 @@ import Map from '@/components/Map'
 Vue.use(Router)
 
 export default new Router({
+  base: '/hurricanes/',
+
   routes: [
     {
       path: '/',
