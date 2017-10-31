@@ -3,8 +3,9 @@
     <h2 class="text-center">Notable Storms</h2>
     <template v-for="name in names">
       <div class="col-sm-4 col-lg-4">
-        <h4 class="text-center">{{name}}</h4>
-        <canvas :id="name" :height="height" :width="width"></canvas>
+        <h4 class="text-center">{{name.name}}</h4>
+        <p class="text-center">Wind: {{name.wind}}</p>
+        <canvas :id="name.name" :height="height" :width="width"></canvas>
       </div>
     </template>
   </div>
@@ -21,7 +22,15 @@
       return {
         width: 300,
         height: 300,
-        names: ["ALLEN", "ANDREW", "GILBERT", "LINDA", "PATRICIA", "WILMA", "SANDY"]
+        names: [
+          { name: "ALLEN", wind: 155 },
+          { name: "ANDREW", wind: 150 },
+          { name: "GILBERT", wind: 160 },
+          { name: "LINDA", wind: 160 },
+          { name: "PATRICIA", wind: 185 },
+          { name: "WILMA", wind: 160 },
+          { name: "SANDY", wind:  100 }
+        ]
       }
     },
 
@@ -62,7 +71,7 @@
             projection.center([-80,30]);
 
             for (let i = 0, n = vm.names.length; i < n; ++i) {
-              let canvas = d3.select(`#${vm.names[i]}`);
+              let canvas = d3.select(`#${vm.names[i].name}`);
               let ctx = canvas.node().getContext('2d');
 
               path = d3.geoPath()
@@ -79,8 +88,8 @@
               ctx.stroke();
 
               // Add hurricane path
-              for (let t = 0, r = storms[vm.names[i]].length; t < r; ++t) {
-                let node = storms[vm.names[i]][t];
+              for (let t = 0, r = storms[vm.names[i].name].length; t < r; ++t) {
+                let node = storms[vm.names[i].name][t];
                 node.x = projection([node.lng, node.lat])[0];
                 node.y = projection([node.lng, node.lat])[1];
 

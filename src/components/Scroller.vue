@@ -36,7 +36,7 @@
 <style scoped>
   #scrolling {
     overflow: hidden;
-    height: 800px;
+    height: 575px;
     margin-right: 0;
   }
 

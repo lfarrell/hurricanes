@@ -8,7 +8,7 @@
         <scroller></scroller>
       </div>
       <div id="base" class="col-sm-9 col-lg-10">
-        <svg id="map" :width="width" height="800px">
+        <svg id="map" :width="width" height="575px">
           <g>
             <rect :height="height" :width="width"></rect>
             <template v-for="(d, index) in selectedHurricanes">
@@ -44,7 +44,7 @@
         done: false,
         width: Math.round(window.innerWidth * .8),
         base_height: window.innerHeight,
-        height: 700,
+        height: 650,
         map: {},
         scale: {},
         projection: {},
@@ -127,7 +127,7 @@
 
         d3.queue()
           .defer(d3.json, 'static/data/map.geojson')
-          .defer(d3.csv, 'static/data/all_storms_short_1980.csv')
+          .defer(d3.csv, 'static/data/all_storms_short_1995.csv')
           .await(function(error, map, data) {
             vm.map = map;
             vm.hurricaneColors = vm.uniqHurricanes(data);

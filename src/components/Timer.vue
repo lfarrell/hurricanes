@@ -1,5 +1,5 @@
 <template>
-  <div class="col-sm-12 col-lg-12">
+  <div class="col-sm-12 col-lg-12" id="timer">
     <vue-slider ref="slider"
                 v-bind="slider_data"
                 v-model="slider_data.value"
@@ -154,6 +154,10 @@
 </script>
 
 <style scoped>
+  #timer {
+    margin-bottom: 50px;
+  }
+
   #faster {
     margin-left: 25px;
   }
