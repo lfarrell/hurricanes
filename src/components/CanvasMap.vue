@@ -4,7 +4,7 @@
     <template v-for="name in names">
       <div class="col-sm-4 col-lg-4">
         <h4 class="text-center">{{name.name}}</h4>
-        <p class="text-center">Wind: {{name.wind}}</p>
+        <p class="text-center">Wind: {{name.mph}}/{{name.km}} mph/km/h</p>
         <canvas :id="name.name" :height="height" :width="width"></canvas>
       </div>
     </template>
@@ -15,6 +15,9 @@
   import * as d3 from 'd3';
   import * as _ from 'lodash';
 
+  const ktToMph = 1.1152,
+        ktToKm = 1.85;
+
   export default {
     name: 'CanvasMap',
 
@@ -23,18 +26,23 @@
         width: 300,
         height: 300,
         names: [
-          { name: "ALLEN", wind: 155 },
-          { name: "ANDREW", wind: 150 },
-          { name: "GILBERT", wind: 160 },
-          { name: "LINDA", wind: 160 },
-          { name: "PATRICIA", wind: 185 },
-          { name: "WILMA", wind: 160 },
-          { name: "SANDY", wind:  100 }
+          { name: "TIP", wind: 140, mph: this.roundUp(140 * ktToMph), km: this.roundUp(140 * ktToKm), center: [140,15] },
+          { name: "PATRICIA", wind: 185, mph: this.roundUp(185 * ktToMph), km: this.roundUp(185 * ktToKm), center: [-80,30] },
+          { name: "GILBERT", wind: 160, mph: this.roundUp(160 * ktToMph), km: this.roundUp(160 * ktToKm), center: [-80,30] },
+          { name: "LINDA", wind: 160, mph: this.roundUp(160 * ktToMph), km: this.roundUp(160 * ktToKm), center: [-80,30] },
+          { name: "WILMA", wind: 160, mph: this.roundUp(160 * ktToMph), km: this.roundUp(160 * ktToKm), center: [-80,30] },
+        //  { name: "ALLEN", wind: 155, mph: this.roundUp(155 * ktToMph), km: this.roundUp(155 * ktToKm) },
+          { name: "ANDREW", wind: 150, mph: this.roundUp(150 * ktToMph), km: this.roundUp(150 * ktToKm), center: [-80,30] },
+          { name: "SANDY", wind: 100, mph: this.roundUp(100 * ktToMph), km: this.roundUp(100 * ktToKm), center: [-80,30] }
         ]
       }
     },
 
     methods: {
+      roundUp(val) {
+        return _.round(val, 1);
+      },
+
       mapScale(data) {
         return d3.scaleSqrt()
           .domain(d3.extent(data, (d) => { return +d.wind; }))
@@ -46,7 +54,7 @@
 
         d3.queue()
           .defer(d3.json, 'static/data/map.geojson')
-          .defer(d3.csv, 'static/data/most_powerful.csv')
+          .defer(d3.csv, 'static/data/big_storms.csv')
           .await(function(error, map, data) {
             let storms = _.groupBy(data, 'name');
             let sizing = vm.mapScale(data);
@@ -68,12 +76,11 @@
               .scale(scale)
               .translate(translation);
 
-            projection.center([-80,30]);
-
             for (let i = 0, n = vm.names.length; i < n; ++i) {
               let canvas = d3.select(`#${vm.names[i].name}`);
               let ctx = canvas.node().getContext('2d');
 
+              projection.center(vm.names[i].center);
               path = d3.geoPath()
                 .projection(projection)
                 .context(ctx);
