@@ -4,7 +4,8 @@
     <template v-for="name in names">
       <div class="col-sm-4 col-lg-4">
         <h4 class="text-center">{{name.name}}</h4>
-        <p class="text-center">Wind: {{name.mph}}/{{name.km}} mph/km/h</p>
+        <p class="text-center">Wind: {{name.mph}}/{{name.km}} mph/km/h<br/>
+           Cost: {{name.cost}}</p>
         <canvas :id="name.name" :height="height" :width="width"></canvas>
       </div>
     </template>
@@ -26,15 +27,21 @@
         width: 300,
         height: 300,
         names: [
-          { name: "TIP", wind: 140, mph: this.roundUp(140 * ktToMph), km: this.roundUp(140 * ktToKm), center: [140,15] },
-          { name: "PATRICIA", wind: 185, mph: this.roundUp(185 * ktToMph), km: this.roundUp(185 * ktToKm), center: [-80,30] },
-          { name: "GILBERT", wind: 160, mph: this.roundUp(160 * ktToMph), km: this.roundUp(160 * ktToKm), center: [-80,30] },
-          { name: "LINDA", wind: 160, mph: this.roundUp(160 * ktToMph), km: this.roundUp(160 * ktToKm), center: [-80,30] },
-          { name: "WILMA", wind: 160, mph: this.roundUp(160 * ktToMph), km: this.roundUp(160 * ktToKm), center: [-80,30] },
-        //  { name: "ALLEN", wind: 155, mph: this.roundUp(155 * ktToMph), km: this.roundUp(155 * ktToKm) },
-          { name: "ANDREW", wind: 150, mph: this.roundUp(150 * ktToMph), km: this.roundUp(150 * ktToKm), center: [-80,30] },
-          { name: "SANDY", wind: 100, mph: this.roundUp(100 * ktToMph), km: this.roundUp(100 * ktToKm), center: [-80,30] }
-        ]
+          { name: "TIP", wind: 140, mph: this.roundUp(140 * ktToMph),
+            km: this.roundUp(140 * ktToKm), center: [140,15], cost: 'Most intense storm in W. Pacific' },
+          { name: "PATRICIA", wind: 185, mph: this.roundUp(185 * ktToMph),
+            km: this.roundUp(185 * ktToKm), center: [-80,30], cost: 'Most intense storm in Americas' },
+        /*  { name: "GILBERT", wind: 160, mph: this.roundUp(160 * ktToMph),
+            km: this.roundUp(160 * ktToKm), center: [-80,30] },
+          { name: "LINDA", wind: 160, mph: this.roundUp(160 * ktToMph),
+            km: this.roundUp(160 * ktToKm), center: [-80,30] },
+          { name: "WILMA", wind: 160, mph: this.roundUp(160 * ktToMph),
+            km: this.roundUp(160 * ktToKm), center: [-80,30] }, */
+          { name: "SANDY", wind: 100, mph: this.roundUp(100 * ktToMph),
+            km: this.roundUp(100 * ktToKm), center: [-80,30], cost: '75 billion USD' },
+          { name: "ANDREW", wind: 150, mph: this.roundUp(150 * ktToMph),
+            km: this.roundUp(150 * ktToKm), center: [-80,30], cost: '26.5 billion USD' }
+            ]
       }
     },
 

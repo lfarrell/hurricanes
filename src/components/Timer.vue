@@ -60,8 +60,8 @@
 
     watch: {
       dateValues: function(val) {
-        this.dateValues = val;
-        this.draw();
+        this.slider_data.data = val;
+        this.slider_values_length = this.slider_data.data.length;
       }
     },
 
@@ -74,7 +74,7 @@
       filteredData(test_value) {
         let parse_date = d3.timeParse('%Y-%m-%d %H:%M');
         let date_to_milli = parse_date(test_value).getTime();
-        let one_week = 60 * 60 * 168 * 1000;
+        let one_week = 60 * 60 * 144 * 1000;
 
         return this.$store.getters.getHurricanes.filter(function(d) {
           return d.full_date <= date_to_milli && d.full_date >= (date_to_milli - one_week);
@@ -138,16 +138,11 @@
       },
 
       dragStart() {
-        this.stopAnimation();
+        this.pauseAnimation();
       },
 
       dragEnd () {
         this.animateGraph();
-      },
-
-      draw() {
-        this.slider_data.data = this.dateValues;
-        this.slider_values_length = this.slider_data.data.length;
       }
     }
   }

@@ -5,7 +5,7 @@
       <h1 class="text-center">Storms of the World - Cyclones, Typhoons and Hurricanes</h1>
       <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
         There are a surprising number of tropical disturbances every year. Most you rarely think about,
-        or have likely even heard of, unless they're headed your way. Storms typically develop in warm water
+        or have likely never even heard of, unless they're headed your way. Storms typically develop in warm water
         near the equator.
       </p>
       <timer :dateValues="dates"></timer>
@@ -53,9 +53,7 @@
         map: {},
         scale: {},
         projection: {},
-        dates: [],
-        hurricaneColors: [],
-        colors: ['#d73027','#fc8d59','#fee090','#ffffbf','#e0f3f8','#91bfdb','#4575b4']
+        dates: []
       }
     },
 
@@ -72,10 +70,6 @@
     },
 
     methods: {
-      uniqHurricanes(data) {
-        return _.map(_.uniq(data, 'name'), 'name');
-      },
-
       hurricaneNote(d) {
         return `<h5 class="text-center">${d.name}</h5>
         <p>
@@ -132,10 +126,9 @@
 
         d3.queue()
           .defer(d3.json, 'static/data/map.geojson')
-          .defer(d3.csv, 'static/data/all_storms_short_1995.csv')
+          .defer(d3.csv, 'static/data/2016.csv')
           .await(function(error, map, data) {
             vm.map = map;
-            vm.hurricaneColors = vm.uniqHurricanes(data);
 
             data.forEach((d) => {
               d.full_date = parse_date(d.time).getTime();
@@ -143,6 +136,7 @@
 
             vm.$store.dispatch('setHurricanes', vm.formatValues(data));
             vm.dates = _.map(_.uniqBy(data, 'time'), 'time');
+          //  console.log(JSON.stringify(vm.dates))
 
             let test_value = data[0].time;
             vm.$store.dispatch('setSelectedHurricanes', vm.filteredData(test_value));
