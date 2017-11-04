@@ -3,6 +3,11 @@
     <div v-if="loading" class="loader">Loading...</div>
     <div class="row" v-show="done">
       <h1 class="text-center">Storms of the World - Cyclones, Typhoons and Hurricanes</h1>
+      <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
+        There are a surprising number of tropical disturbances every year. Most you rarely think about,
+        or have likely even heard of, unless they're headed your way. Storms typically develop in warm water
+        near the equator.
+      </p>
       <timer :dateValues="dates"></timer>
       <div class="col-sm-3 col-lg-2">
         <scroller></scroller>
@@ -198,9 +203,15 @@
   #base {
     margin: 0;
   }
+
+  p {
+    color: white;
+    text-align: left;
+  }
+
   h1 {
     color: white;
-    margin-bottom: 75px;
+    margin-bottom: 50px;
     width: 100%;
   }
   .loader {

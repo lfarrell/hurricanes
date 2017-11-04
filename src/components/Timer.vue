@@ -37,7 +37,7 @@
         animating: {},
         animationInterval: 100,
         slider_data: {
-          value: '1965-06-04 00:00:00',
+          value: '1995-01-01 00:00',
           width: '80%',
           speed: .5,
           formatter: function(value) {
@@ -155,6 +155,7 @@
 
 <style scoped>
   #timer {
+    margin-top: 50px;
     margin-bottom: 50px;
   }
 
