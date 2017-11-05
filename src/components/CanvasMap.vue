@@ -6,6 +6,10 @@
       which often allows time to evacuate inland, away from the worst of a storm. Particularly before the satellite
       era people would often have no idea that a storm was even approaching until it was right on top of them.
     </p>
+    <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
+      Highlighted below are the storm paths of some of the worlds most powerful and expensive storms.
+      The great Atlantic storms of 2017 are not included as data is not yet available.
+    </p>
     <template v-for="name in names">
       <div class="col-sm-4 col-lg-4">
         <h4 class="text-center">{{name.name}}</h4>
@@ -15,6 +19,26 @@
         <canvas :id="name.name" :height="height" :width="width"></canvas>
       </div>
     </template>
+    <div class="row col-sm-12 col-lg-12 ">
+      <footer>
+        <ul class="list-unstyled">
+          <li><a href="../index.php">Other Visualizations</a></li>
+          <li><a href="../western_water">Western Water</a></li>
+          <li><a href="mailto:farrelldlfarrell@gmail.com">Email</a></li>
+          <li><a href="https://twitter.com/farrelldlfarrel">Twitter</a></li>
+        </ul>
+      </footer>
+    </div>
+    <div class=" row col-sm-12 col-lg-12">
+      <div class="col-offset-md-1 subfooter">
+        <h3 class="text-center">Data Sources</h3>
+        <ul class="list-unstyled text-center">
+          <li><a href="https://www.ncdc.noaa.gov/ibtracs/index.php?name=ibtracs-data">Storm Paths</a></li>
+          <li><a href="https://en.wikipedia.org/wiki/List_of_the_most_intense_tropical_cyclones">Strongest Storms</a></li>
+          <li><a href="https://en.wikipedia.org/wiki/List_of_costliest_Atlantic_hurricanes">Most Expensive Storms</a></li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -140,11 +164,47 @@
     text-indent: 20px;
   }
 
+  ul {
+    list-style-type: none;
+  }
+
+  a, a:hover, a:visited {
+    color: orange;
+  }
+
   h2 {
     width: 100%;
   }
 
-  h4 {
+  h3 {
+    text-align: justify;
+  }
+
+  h3, h4 {
     margin-top: 25px;
+  }
+
+  footer {
+    width: 100%;
+    margin-top: 50px;
+  }
+
+  footer ul {
+    text-align: center;
+  }
+
+  footer ul li {
+    display: inline;
+    margin-left: 25px;
+    font-size: 1.4em;
+  }
+
+  .subfooter {
+    width: 100%;
+    margin-bottom: 25px;
+  }
+
+  .subfooter ul {
+    text-align: center;
   }
 </style>
