@@ -2,7 +2,7 @@
   <div id="storms" class="row">
     <h2 class="text-center">Notable Storms</h2>
     <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
-      Mercifully, storms have gotten less deadly over time. This is due largely to greatly improved forecasting
+      Mercifully, storms have gotten less deadly over time. This is due largely to greatly improved forecasting,
       which often allows time to evacuate inland, away from the worst of a storm. Particularly before the satellite
       era people would often have no idea that a storm was even approaching until it was right on top of them.
     </p>
