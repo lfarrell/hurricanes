@@ -5,8 +5,42 @@
       <h1 class="text-center">Storms of the World - Cyclones, Typhoons and Hurricanes</h1>
       <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
         There are a surprising number of tropical disturbances every year. Most you rarely think about,
-        or have likely never even heard of, unless they're headed your way. Storms typically develop in warm water
-        near the equator.
+        or have likely never even heard of, unless they're headed your way. Historically, storm data is
+        somewhat spotty. The satellite era of storm tracking only
+        began in 1965, so it is completely possible that there were major storms that stayed at sea that no
+        one was aware of.
+      </p>
+      <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
+        Storms typically develop in warm water near the equator. They're most common in the first half of
+        the year in the south hemisphere, with storm likelihood switching to the northern hemisphere in the
+        second half of the year.
+      </p>
+      <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
+        The map below shows every named storm since 1995. If you don't want to wait for the animation
+        you can drag the slider to any point in time that you are interested in. Pause the animation and
+        hover over any storm circle to see the storm intensity at that point in time. Zoom and pan the map
+        for a closer look.
+      </p>
+      <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
+        If you'd like to make a donation to help the victims of the recent spate of huge hurricanes to strike
+        the United States and Caribbean:
+        <ul>
+          <li><a target="_blank" href="https://www.nytimes.com/2017/09/22/world/americas/hurricane-maria-donate-charity.html">Hurricane Maria</a></li>
+          <li><a target="_blank" href="https://www.nytimes.com/2017/09/08/us/hurricane-irma-help-donate.html">Hurricane Irma</a></li>
+          <li><a target="_blank" href="https://www.nytimes.com/2017/08/28/us/donate-harvey-charities-scams.html">Hurricane Harvey</a></li>
+        </ul>
+      </p>
+      <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
+        Where are the big, recent storms: Harvey, Irma and Maria? They're not included in the data provided by
+        the National Oceanic and Atmospheric Administration. They'll be added in when they're available.
+      </p>
+      <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
+        Note: Maximum sustained winds are calculated differently depending on where the storm occurs. In the
+        Atlantic and Northeastern Pacific they are calculated based on the maximum sustained wind speed for one
+        minute. In the rest of the world wind intensity is calculated as the maximum sustained wind speed over either
+        a three minute or ten minute period. This can give the appearance that storms that are actually of the same intensity are
+        more intense in the Atlantic and Northeastern Pacific. Unfortunately there's no real way to correct for
+        this.
       </p>
       <timer :dateValues="dates"></timer>
       <div class="col-sm-3 col-lg-2">
@@ -199,11 +233,14 @@
   p {
     color: white;
     text-align: left;
+    text-indent: 20px;
   }
-
+  a, a:hover, a:visited {
+    color: orange;
+  }
   h1 {
     color: white;
-    margin-bottom: 50px;
+    margin-bottom: 25px;
     width: 100%;
   }
 
@@ -226,5 +263,8 @@
   circle {
     fill: orange;
     fill-opacity: .5;
+    stroke-width: .25px;
+    stroke: choclate;
+    stroke-opacity:  .7;
   }
 </style>

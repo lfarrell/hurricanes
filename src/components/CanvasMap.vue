@@ -1,11 +1,17 @@
 <template>
   <div id="storms" class="row">
     <h2 class="text-center">Notable Storms</h2>
+    <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
+      Mercifully, storms have gotten less deadly over time. This is due largely to greatly improved forecasting
+      which often allows time to evacuate inland, away from the worst of a storm. Particularly before the satellite
+      era people would often have no idea that a storm was even approaching until it was right on top of them.
+    </p>
     <template v-for="name in names">
       <div class="col-sm-4 col-lg-4">
         <h4 class="text-center">{{name.name}}</h4>
-        <p class="text-center">Wind: {{name.mph}}/{{name.km}} mph/km/h<br/>
-           Cost: {{name.cost}}</p>
+        <p class="text-center">
+          Wind: {{name.mph}}/{{name.km}} mph/km/h<br/>
+          {{name.cost}}</p>
         <canvas :id="name.name" :height="height" :width="width"></canvas>
       </div>
     </template>
@@ -28,19 +34,17 @@
         height: 300,
         names: [
           { name: "TIP", wind: 140, mph: this.roundUp(140 * ktToMph),
-            km: this.roundUp(140 * ktToKm), center: [140,15], cost: 'Most intense storm in W. Pacific' },
+            km: this.roundUp(140 * ktToKm), center: [140,15], cost: 'Most intense storm in the Pacific' },
           { name: "PATRICIA", wind: 185, mph: this.roundUp(185 * ktToMph),
-            km: this.roundUp(185 * ktToKm), center: [-80,30], cost: 'Most intense storm in Americas' },
-        /*  { name: "GILBERT", wind: 160, mph: this.roundUp(160 * ktToMph),
-            km: this.roundUp(160 * ktToKm), center: [-80,30] },
-          { name: "LINDA", wind: 160, mph: this.roundUp(160 * ktToMph),
-            km: this.roundUp(160 * ktToKm), center: [-80,30] },
-          { name: "WILMA", wind: 160, mph: this.roundUp(160 * ktToMph),
-            km: this.roundUp(160 * ktToKm), center: [-80,30] }, */
+            km: this.roundUp(185 * ktToKm), center: [-80,30], cost: 'Most intense storm in the Americas' },
+          { name: "FANTALA", wind: 135, mph: this.roundUp(135 * ktToMph),
+            km: this.roundUp(135 * ktToKm), center: [85,20], cost: 'Most intense storm in the Indian Ocean' },
+          { name: "KATRINA", wind: 150, mph: this.roundUp(150 * ktToMph),
+            km: this.roundUp(150 * ktToKm), center: [-80,30], cost: 'Cost: 108 billion USD' },
           { name: "SANDY", wind: 100, mph: this.roundUp(100 * ktToMph),
-            km: this.roundUp(100 * ktToKm), center: [-80,30], cost: '75 billion USD' },
+            km: this.roundUp(100 * ktToKm), center: [-80,30], cost: 'Cost: 75 billion USD' },
           { name: "ANDREW", wind: 150, mph: this.roundUp(150 * ktToMph),
-            km: this.roundUp(150 * ktToKm), center: [-80,30], cost: '26.5 billion USD' }
+            km: this.roundUp(150 * ktToKm), center: [-80,30], cost: 'Cost: 26.5 billion USD' }
             ]
       }
     },
@@ -128,6 +132,12 @@
 <style scoped>
   #storms {
     color: white;
+  }
+
+  p {
+    text-align: left;
+    color: white;
+    text-indent: 20px;
   }
 
   h2 {
