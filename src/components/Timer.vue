@@ -39,6 +39,7 @@
         slider_data: {
           value: '1995-01-01 00:00',
           width: '80%',
+          clickable: false,
           speed: .5,
           formatter: function(value) {
             let formatting = d3.timeFormat('%b %d %I:%M %p, %Y');

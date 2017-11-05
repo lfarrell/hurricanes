@@ -1,7 +1,7 @@
 <template>
   <div class="col-sm-12 col-lg-12">
     <div v-if="loading" class="loader">Loading...</div>
-    <div class="row" v-show="done">
+    <div class="row" v-bind:class="{'show': loading}">
       <h1 class="text-center">Storms of the World - Cyclones, Typhoons and Hurricanes</h1>
       <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
         There are a surprising number of tropical disturbances every year. Most you rarely think about,
@@ -46,7 +46,6 @@
     data() {
       return {
         loading: true,
-        done: false,
         width: Math.round(window.innerWidth * .8),
         base_height: window.innerHeight,
         height: 650,
@@ -126,7 +125,7 @@
 
         d3.queue()
           .defer(d3.json, 'static/data/map.geojson')
-          .defer(d3.csv, 'static/data/2016.csv')
+          .defer(d3.csv, 'static/data/all_storms_short_1995.csv')
           .await(function(error, map, data) {
             vm.map = map;
 
@@ -182,7 +181,6 @@
             }
 
             vm.loading = false;
-            vm.done = true;
           });
       }
     },
@@ -208,6 +206,11 @@
     margin-bottom: 50px;
     width: 100%;
   }
+
+  .show {
+    opacity: 0;
+  }
+
   .loader {
     font-size: 3em;
     margin-top:25px;
