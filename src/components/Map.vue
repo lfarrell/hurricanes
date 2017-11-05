@@ -170,7 +170,6 @@
 
             vm.$store.dispatch('setHurricanes', vm.formatValues(data));
             vm.dates = _.map(_.uniqBy(data, 'time'), 'time');
-          //  console.log(JSON.stringify(vm.dates))
 
             let test_value = data[0].time;
             vm.$store.dispatch('setSelectedHurricanes', vm.filteredData(test_value));
