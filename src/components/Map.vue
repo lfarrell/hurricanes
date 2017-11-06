@@ -11,16 +11,17 @@
         one was aware of.
       </p>
       <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
-        Storms typically develop in warm water near the equator. They're most common in the first half of
-        the year in the southern hemisphere, with storm likelihood switching to the northern hemisphere in the
-        second half of the year. It's unclear if there will be more storms as the climate warms, but it is
-        thought that that the storms that do form will be more intense than they otherwise would have been.
+        Storms typically develop in warm water near the equator. They're most common in the first half
+        of the year in the southern hemisphere, with storm likelihood switching to the
+        northern hemisphere in the second half of the year. It's unclear if there will be
+        more storms as the climate warms, but the storms that do form will, likely, be more
+        intense than they otherwise would have been.
       </p>
       <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
         The map below shows every named storm since 1995. If you don't want to wait for the animation
-        you can drag the slider to any point in time that you are interested in. Pause the animation and
-        hover over any storm circle to see the storm intensity at that point in time. Zoom and pan the map
-        for a closer look.
+        you can drag the slider to any point on the time line. Pause the animation and hover
+        over any storm circle to see the storm intensity at that on the time line.
+        Zoom and pan the map for a closer look.
       </p>
       <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
         If you'd like to make a donation to help the victims of the recent spate of huge hurricanes to strike
@@ -37,9 +38,9 @@
       </p>
       <p class="col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
         Note: Maximum sustained winds are calculated differently depending on where the storm occurs. In the
-        Atlantic and Northeastern Pacific they are calculated based on the maximum sustained wind speed for one
-        minute. In the rest of the world wind intensity is calculated as the maximum sustained wind speed over either
-        a three minute or, more commonly, ten minute period. This can give the appearance that storms that are actually of the same intensity are
+        Atlantic and Northeastern Pacific, wind speeds are the maximum sustained wind speed for one
+        minute. In the rest of the world, wind intensity is the maximum sustained wind speed over either
+        a three-minute or, more commonly, ten minute period. This can make it seem that storms that are actually of the same intensity are
         more intense in the Atlantic and Northeastern Pacific. Unfortunately there's no real way to correct for
         this in the available data.
       </p>

@@ -29,7 +29,15 @@
 
     computed: {
       offSet() {
-        return this.legendOrientation().orientation === 'horizontal' ? '-35px' : 0;
+        let orientation = this.legendOrientation().orientation;
+
+        if(orientation === 'horizontal' && this.field === 'canvas') {
+          return '-65px';
+        } else if(orientation === 'horizontal') {
+          return '-45px';
+        }
+
+        return  0;
       }
     },
 
@@ -44,8 +52,8 @@
       circleSizing() {
         let sizing;
 
-        if (window.innerWidth < 500) {
-          sizing = [1, 5];
+        if (this.field === 'canvas') {
+          sizing = [.5, 6];
         } else {
           sizing = [1, 10];
         }

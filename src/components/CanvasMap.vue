@@ -10,6 +10,7 @@
       Highlighted below are the storm paths of some of the worlds most powerful and expensive storms.
       The great Atlantic storms of 2017 are not included as data is not yet available.
     </p>
+    <circle-legend :dataValues="hurricanes" :field="selector"></circle-legend>
     <template v-for="name in names">
       <div class="col-sm-4 col-lg-4">
         <h4 class="text-center">{{name.name}}</h4>
@@ -45,6 +46,7 @@
 <script>
   import * as d3 from 'd3';
   import * as _ from 'lodash';
+  import CircleLegend from './CircleLegend';
 
   const ktToMph = 1.1152,
         ktToKm = 1.85;
@@ -56,6 +58,8 @@
       return {
         width: 300,
         height: 300,
+        selector: 'canvas',
+        hurricanes: [],
         names: [
           { name: "TIP", wind: 140, mph: this.roundUp(140 * ktToMph),
             km: this.roundUp(140 * ktToKm), center: [140,15], cost: 'Most intense storm in the Pacific' },
@@ -73,6 +77,10 @@
       }
     },
 
+    components: {
+      CircleLegend
+    },
+
     methods: {
       roundUp(val) {
         return _.round(val, 1);
@@ -84,6 +92,19 @@
           .range([.5, 6]);
       },
 
+      formatValues(data) {
+        const ktToMph =1.1152;
+        const ktToKm = 1.85;
+        const windFormat = d3.format(".1f");
+
+        data.forEach((d) => {
+          d.mph = windFormat(d.wind * ktToMph);
+          d.km = windFormat(d.wind * ktToKm);
+        });
+
+        return data;
+      },
+
       draw() {
         let vm = this;
 
@@ -91,6 +112,7 @@
           .defer(d3.json, 'static/data/map.geojson')
           .defer(d3.csv, 'static/data/big_storms.csv')
           .await(function(error, map, data) {
+            vm.hurricanes = vm.formatValues(data);
             let storms = _.groupBy(data, 'name');
             let sizing = vm.mapScale(data);
 
