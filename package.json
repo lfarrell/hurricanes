@@ -12,7 +12,6 @@
   "dependencies": {
     "bootstrap-vue": "^1.0.0-beta.9",
     "d3": "^4.10.2",
-    "d3-geo-projection": "^2.3.1",
     "d3-svg-legend": "^2.24.1",
     "lodash": "^4.17.4",
     "vue": "^2.4.2",

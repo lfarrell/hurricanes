@@ -44,6 +44,7 @@
         this in the available data.
       </p>
       <timer :dateValues="dates"></timer>
+      <circle-legend :dataValues="hurricanes" :field="selector"></circle-legend>
       <div class="col-sm-3 col-lg-2">
         <scroller></scroller>
       </div>
@@ -74,6 +75,7 @@
   import Timer from './Timer';
   import Scroller from './Scroller';
   import CanvasMap from './CanvasMap';
+  import CircleLegend from './CircleLegend';
 
   export default {
     name: 'Map',
@@ -81,20 +83,23 @@
     data() {
       return {
         loading: true,
+        selector: 'main',
         width: Math.round(window.innerWidth * .8),
         base_height: window.innerHeight,
         height: 650,
         map: {},
         scale: {},
         projection: {},
-        dates: []
+        dates: [],
+        hurricanes: []
       }
     },
 
     components: {
       Timer,
       Scroller,
-      CanvasMap
+      CanvasMap,
+      CircleLegend
     },
 
     computed: {
@@ -168,7 +173,8 @@
               d.full_date = parse_date(d.time).getTime();
             });
 
-            vm.$store.dispatch('setHurricanes', vm.formatValues(data));
+            vm.hurricanes = vm.formatValues(data);
+            vm.$store.dispatch('setHurricanes', vm.hurricanes);
             vm.dates = _.map(_.uniqBy(data, 'time'), 'time');
 
             let test_value = data[0].time;
