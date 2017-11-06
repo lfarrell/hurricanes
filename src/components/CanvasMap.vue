@@ -220,7 +220,7 @@
   footer ul li {
     display: inline;
     margin-left: 25px;
-    font-size: 1.4em;
+    font-size: 1.1em;
   }
 
   .subfooter {
