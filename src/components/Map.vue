@@ -181,6 +181,7 @@
             let test_value = data[0].time;
             vm.$store.dispatch('setSelectedHurricanes', vm.filteredData(test_value));
 
+            let offset = vm.width >= 1100 ? 2.1 : 2.5;
             vm.scale = vm.mapScale(data);
 
             let scale = 1,
@@ -191,9 +192,9 @@
 
             let path = d3.geoPath().projection(projection);
             let bounds = path.bounds(map);
-            scale = .98 / Math.max((bounds[1][0] - bounds[0][0]) / vm.width, (bounds[1][1] - bounds[0][1]) / vm.height);
+            scale = .95 / Math.max((bounds[1][0] - bounds[0][0]) / vm.width, (bounds[1][1] - bounds[0][1]) / vm.height);
             let translation = [(vm.width - scale * (bounds[1][0] + bounds[0][0])) / 2,
-              (vm.height - scale * (bounds[1][1] + bounds[0][1])) / 2.5];
+              (vm.height - scale * (bounds[1][1] + bounds[0][1])) / offset];
 
             // update projection
             projection = mapType

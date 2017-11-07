@@ -4,7 +4,7 @@
       <li v-for="h in selectedHurricanes">
         <h5 class="text-center">{{ h.name }}</h5>
         <p>
-          {{h.date}}
+          {{h.date}}<br/>
           Wind: {{h.mph}} mph<br/>
           Latitude: {{h.display_lat}}<br/>
           Longitude: {{h.display_lng}}<br/>
