@@ -269,7 +269,7 @@
   }
 
   circle {
-    fill: orange;
+    fill: firebrick;
     fill-opacity: .5;
     stroke-width: .25px;
     stroke: choclate;

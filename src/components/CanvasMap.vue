@@ -166,7 +166,7 @@
                 ctx.moveTo(node.x, node.y);
                 ctx.arc(node.x, node.y, sizing(node.wind), 0, 2 * Math.PI, false);
                 ctx.lineWidth = 4;
-                ctx.fillStyle = 'rgba(255,165,0, 0.5)';
+                ctx.fillStyle = 'rgba(178,34,34,0.5)';
                 ctx.fill();
               }
             }
