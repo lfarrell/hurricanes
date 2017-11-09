@@ -205,7 +205,7 @@
 
   h2 {
     width: 100%;
-    margin-top: 50px;
+    margin-top: 25px;
   }
 
   h3 {
